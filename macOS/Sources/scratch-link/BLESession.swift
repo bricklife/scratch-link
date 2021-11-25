@@ -421,14 +421,21 @@ class BLESession: Session, SwiftCBCentralManagerDelegate, SwiftCBPeripheralDeleg
                 completion(nil, error)
             }
 
+            guard let peripheral = self.connectedPeripheral else {
+                // this should never happen
+                completion(nil, JSONRPCError.internalError(data: "stopNotifications request without connected peripheral"))
+                return
+            }
+
             guard let endpoint = endpoint else {
                 completion(nil, JSONRPCError.invalidRequest(data: "failed to find characteristic"))
                 return
             }
 
             self.watchedCharacteristics.remove(endpoint)
+            peripheral.setNotifyValue(false, for: endpoint)
 
-            endpoint.service.peripheral.setNotifyValue(false, for: endpoint)
+            completion(nil, nil)
         }
     }
 
