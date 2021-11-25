@@ -2,7 +2,8 @@ import Foundation
 import IOBluetooth
 import PerfectWebSockets
 
-class BTSession: Session, IOBluetoothRFCOMMChannelDelegate, IOBluetoothDeviceInquiryDelegate {
+class BTSession: Session, IOBluetoothRFCOMMChannelDelegate, SwiftIOBluetoothDeviceInquiryDelegate {
+    private let bluetoothDeviceInquiryDelegateHelper: IOBluetoothDeviceInquiryDelegateHelper
     private var inquiry: IOBluetoothDeviceInquiry
     private var connectedChannel: IOBluetoothRFCOMMChannel?
     private let rfcommQueue = DispatchQueue(label: "ScratchLink.BTSession.rfcommQueue")
@@ -17,9 +18,11 @@ class BTSession: Session, IOBluetoothRFCOMMChannelDelegate, IOBluetoothDeviceInq
 
     required init(withSocket webSocket: WebSocket) throws {
         ouiPrefix = ""
+        bluetoothDeviceInquiryDelegateHelper = IOBluetoothDeviceInquiryDelegateHelper()
         inquiry = IOBluetoothDeviceInquiry(delegate: nil)
         try super.init(withSocket: webSocket)
-        inquiry.delegate = self
+        bluetoothDeviceInquiryDelegateHelper.delegate = self
+        inquiry.delegate = bluetoothDeviceInquiryDelegateHelper
     }
 
     override func didReceiveCall(_ method: String, withParams params: [String: Any],
