@@ -28,5 +28,7 @@
     <true/>
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © 2018 Massachusetts Institute of Technology</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+    <string>Fix `NSBluetoothAlwaysUsageDescription` string</string>
   </dict>
 </plist>
