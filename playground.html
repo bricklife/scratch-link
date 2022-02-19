@@ -238,9 +238,10 @@
         class ScratchLinkClient extends JSONRPCWebSocket {
             constructor(path) {
                 const protocol = document.getElementById('linkSecure').checked ? 'wss' : 'ws';
+                const port = document.getElementById('linkSecure').checked ? 20110 : 20111;
                 const host = document.getElementById('linkHost').value;
                 try {
-                    const webSocket = new WebSocket(`${protocol}://${host}:20110/${path}`);
+                    const webSocket = new WebSocket(`${protocol}://${host}:${port}/${path}`);
                     super(webSocket);
                 } catch (e) {
                     addLine(`Ctor exception: ${stringify(e)}`);
